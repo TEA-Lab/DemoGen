@@ -59,10 +59,12 @@ cd ..
 The 𝑫𝒆𝒎𝒐𝑮𝒆𝒏 procedure is implemented in `demo_generation/demo_generation/demogen.py`. To run the code, you need to specify a `.yaml` config file under the `demo_generation/demo_generation/config` folder, where we provide some examples for your reference. The outer entrance that combines the main code and configs is `demo_generation/gen_demo.py`.
 
 #### 2.2. Inputs & Outputs
-We prepare some `.zarr` datasets consisting of 1~3 source demos under the folder `data/datasets/source`. By running the `gen_demo.py` script with proper config file, you can generate datsets of synthetic demos, which will be placed under the `data/datasets/generated` folder. To get a sense of what has been generated, you can check the rendered videos under the `data/videos` folder, when the `generation:render_video` flag is set to `True` in the config file.
+We prepare some `.zarr` datasets consisting of 1~3 source demos under the folder `data/datasets/source`. By running the `gen_demo.py` script with proper config file, you can generate datsets of synthetic demos, which will be placed under the `data/datasets/generated` folder. To get a sense of what has been generated, you can check the rendered videos under the `data/videos` folder, when the `generation:render_video` flag is set to `True` in the config file. 
+
+**Note:** While the demo generation process is very fast, it takes ~10s to render the video for a single generated trajectory. So we recommend rendering videos only for debugging purpose.
 
 #### 2.3. Demo Generation!
-We provide some example commands in the `demo_generation/run_gen_demo.sh` script. You can try running it, and compare the results of synthetic and source demos in the `data/datasets/generated` and `data/videos` folders.
+We provide some example generation commands in the `demo_generation/run_gen_demo.sh` script, including four tasks: **Flower-Vase**, **Mug-Rack**, **Spatula-Egg**, and **Sauce-Spreading**. You can try running it, and compare the results of synthetic and source demos in the `data/datasets/generated` and `data/videos` folders.
 ```bash
 cd demo_generation
 bash run_gen_demo.sh
