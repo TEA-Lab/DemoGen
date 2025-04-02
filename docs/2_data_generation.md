@@ -1,3 +1,14 @@
 # Data Generation with 𝑫𝒆𝒎𝒐𝑮𝒆𝒏
 
-TBD.
+𝑫𝒆𝒎𝒐𝑮𝒆𝒏 is designed for the automatic generation of synthetic demonstrations. The unavoidable human effort in the 𝑫𝒆𝒎𝒐𝑮𝒆𝒏 pipeline lies in the pre-processing process, i.e., (1) segmenting the point cloud observation *only for the first frame*, and (2) parsing the source trajectory into object-centric segments. 
+
+## Point Cloud Segmentation
+Once we exclude the unrelated points outside the workspace and process the point cloud with clustering and FPS, the points in the cloud of the first frame should belong to either the robot end-effector or the object(s). In many cases, they can be easily separated by manually specifying a bounding box for the object, and the rest of the cloud should belong to the robot end-effector.
+
+We also provide a more elegant implementation to automate this process by leveraging open-vocabulary segmentation models (e.g., [Grounded-SAM](https://github.com/IDEA-Research/Grounded-Segment-Anything) or [LangSAM](https://github.com/luca-medeiros/lang-segment-anything)). More specifically, we only need to describe the manipulated objects with natural language. Taking the language prompt as input, these models can segment the corresponding objects on the RGB image. Next, since the RGB and depth image are pixel-aligned, we can project the segmented masks onto the depth image to obtain the point cloud segmentation. An implementation of this process is provided in `demo_generation/demo_generation/mask_util.py`.
+
+
+## Source Trajectory Parsing
+The source trajectory needs to be parsed into object-centric segments. For each object manipulated in the task, it is related to 2 sub-segments: (1) a *motion* segment that approaches the object, and (2) a *skill* segment that manipulates the object thourgh contact. Still, we have two options for trajectory parsing. The more straightforward one is in fact to manually specify the start frames for each sub-segment. You can run the demo generation code with `generation:range_name: src` and `generation:render_video: True`, and this will give you the rendered video of the source demonstration. You can easily tell the parsing frames by looking at the frame index marked on the top-left corner of the video.
+
+Still, we provide a more elegant way by checking whether the distance between the robot end-effector and the object point cloud falls below a threshold. While this automates the parsing process, it may require some manual tuning of the threshold, and therefore is not as practical as manual specification in many cases. The implementations are provided in `parse_frames_two_stage` and `parse_frames_one_stage` functions in `demo_generation/demo_generation/demogen.py`.

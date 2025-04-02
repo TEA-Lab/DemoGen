@@ -1,8 +1,8 @@
 
 
-# <a href="https://https://demo-generation.github.io/">𝑫𝒆𝒎𝒐𝑮𝒆𝒏: Synthetic Demonstration Generation for Data-Efficient Visuomotor Policy Learning</a>
+# <a href="https://demo-generation.github.io/">𝑫𝒆𝒎𝒐𝑮𝒆𝒏: Synthetic Demonstration Generation for Data-Efficient Visuomotor Policy Learning</a>
 
-<a href="https://https://demo-generation.github.io/"><strong>Project Page</strong></a> | <a href="https://arxiv.org/abs/2502.16932"><strong>arXiv</strong></a> | <a href="https://x.com/ZhengrongX/status/1899134914416800123"><strong>Twitter</strong></a> 
+<a href="https://demo-generation.github.io/"><strong>Project Page</strong></a> | <a href="https://arxiv.org/abs/2502.16932"><strong>arXiv</strong></a> | <a href="https://x.com/ZhengrongX/status/1899134914416800123"><strong>Twitter</strong></a> 
 
 
 
@@ -25,7 +25,7 @@ For action generation, 𝑫𝒆𝒎𝒐𝑮𝒆𝒏 adopts the idea of Task and 
 * **2025/04/02**, Officially released 𝑫𝒆𝒎𝒐𝑮𝒆𝒏.
 
 
-# 🚀 Quick Try
+# 🚀 Quick Try in 5 Minutes
 ## 1. Minimal Installation
 #### 1.0. Create conda Env
 ```bash

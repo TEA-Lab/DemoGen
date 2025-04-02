@@ -1,6 +1,6 @@
 # Data Collection (for Your Own Task)
 
-We provide some source demos under the `data/datasets/source` folder. If you only want to get a sense of how 𝑫𝒆𝒎𝒐𝑮𝒆𝒏 works, you can directly start from the provided demos, and jump to [data_generation](./2_data_generation.md). If you want to collect your own data, you can follow the steps below.
+We provide some source demos under the `data/datasets/source` folder. If you only want to get a sense of how 𝑫𝒆𝒎𝒐𝑮𝒆𝒏 works, you can directly start from the provided demos, and jump to Quick Try in [README](../README.md) or the instructions in [data_generation](./2_data_generation.md). If you want to collect your own data, you can follow the steps below.
 
 
 
@@ -18,8 +18,10 @@ These dimension informations should be specified in the `shape_meta:` configurat
 ## Data Requirements
 𝑫𝒆𝒎𝒐𝑮𝒆𝒏 can be applied to various platforms, including bimanual manipulation and dexterous-hand end-effectors. We provide an interface for collecting demos with keyboard for your reference in `real_world/collect_demo.py`.
 
-To facilitate synthetic generation of visual observations, 𝑫𝒆𝒎𝒐𝑮𝒆𝒏 require the access to **3D point clouds**. This asks for preliminary camera calibration of the depth camera. You can follow the procedures in a [note](https://gist.github.com/hshi74/edabc1e9bed6ea988a2abd1308e1cc96) by Haochen Shi. The camera-related parameters should be noted in the beginning of `real_world/utils/pcd_process.py`.
+To facilitate synthetic generation of visual observations, 𝑫𝒆𝒎𝒐𝑮𝒆𝒏 require the access to **3D point clouds**. This asks for preliminary camera calibration of the depth camera. You can follow the procedures in a [note](https://gist.github.com/hshi74/edabc1e9bed6ea988a2abd1308e1cc96) by Haochen Shi. The camera-related parameters should be noted in the beginning of `real_world/utils/pcd_process.py`. 
+
+Similar to many previous works using 3D point clouds as the visual observation, the unrelated points (i.e., those from the background and the table surface) should be **cropped out**. Once the camera calibration is ready, this can be easily done by specifying a workspace bounding box and discarding all the points outside the workspace.
 
 The point cloud we use is projected from **single-view** depth image instead of multi-view, since (1) the calibration process is time-consuming, (2) single-view camera is more practical for mobile platforms, e.g., ego-centric vision on a humanoid.
 
-Like DP3, we recommend the use of RealSense **L515** rather than the more commonly seen D435, because L515 captures higher-quality point clouds, e.g., fewer holes on the object surface, clearer boundaries between objects and background. We add a DBSCAN clustering step to discard the outlier points in the processing pipeline, which we found could effectively improve the quality of point clouds.
+Like DP3, we recommend the use of RealSense **L515** rather than the more commonly seen D435, because L515 captures higher-quality point clouds, e.g., fewer holes on the object surface, clearer boundaries between objects and background. We add a DBSCAN clustering step to discard the outlier points in the processing pipeline, which we found could effectively improve the quality of point clouds. Afterwards, the point cloud should undergo a farthest point sampling (FPS) process, downsampled to a fixed number of points, e.g., `1024`.
