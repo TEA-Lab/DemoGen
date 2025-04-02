@@ -1,0 +1,27 @@
+name: galaxea
+
+task_name: galaxea
+
+shape_meta: &shape_meta
+  # acceptable types: rgb, low_dim
+  obs:
+    point_cloud:
+      shape: [1024, 3]
+      type: point_cloud
+    agent_pos:
+      shape: [14]
+      type: low_dimx
+  action:
+    shape: [14]
+
+env_runner: null
+
+dataset:
+  _target_: diffusion_policies.dataset.galaxea_dataset.GalaxeaDataset
+  zarr_path: data/carrot.zarr #
+  horizon: ${horizon}
+  pad_before: ${eval:'${n_obs_steps}-1'}
+  pad_after: ${eval:'${n_action_steps}-1'}
+  seed: 42
+  val_ratio: 0.02
+  max_train_episodes: 90

@@ -1,0 +1,5 @@
+setup.py
+demo_generation.egg-info/PKG-INFO
+demo_generation.egg-info/SOURCES.txt
+demo_generation.egg-info/dependency_links.txt
+demo_generation.egg-info/top_level.txt

@@ -1,0 +1,34 @@
+_target_: demo_generation.demogen.DemoGen
+
+data_root: data
+source_name: mug
+
+task_n_object: 2
+
+use_linear_interpolation: false
+interpolate_step_size: 0.01
+
+use_manual_parsing_frames: true
+parsing_frames:
+  motion-1: 0
+  skill-1: 5
+  motion-2: 39
+  skill-2: 46
+
+mask_names:
+  object: pink mug
+  target: cup rack
+
+trans_range:
+  src:
+    object: [[0, 0, 0], [0, 0, 0]]
+    target: [[0, 0, 0], [0, 0, 0]]
+  test:
+    object: [[-0.10, -0.10, 0], [0.10, 0.10, 0]]
+    target: [[-0.10, -0.10, 0], [0.10, 0.10, 0]]
+ 
+generation:
+  range_name: test
+  n_gen_per_source: 16
+  render_video: True
+  mode: grid

@@ -1,0 +1,38 @@
+_target_: demo_generation.demogen.DemoGen
+data_root: ../data
+source_name: egg
+task_n_object: 1
+use_linear_interpolation: false
+interpolate_step_size: 0.01
+use_manual_parsing_frames: true
+parsing_frames:
+  motion-1: 0
+  skill-1: 7
+  motion-2: null
+  skill-2: null
+mask_names:
+  object: plate
+trans_range:
+  src:
+    object:
+    - - 0
+      - 0
+      - 0
+    - - 0
+      - 0
+      - 0
+    target: null
+  test:
+    object:
+    - - -0.3
+      - -0.3
+      - 0
+    - - 0.3
+      - 0.3
+      - 0
+    target: null
+generation:
+  range_name: test
+  n_gen_per_source: 9
+  render_video: true
+  mode: grid

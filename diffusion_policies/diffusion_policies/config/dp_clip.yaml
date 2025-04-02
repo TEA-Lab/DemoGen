@@ -1,0 +1,198 @@
+defaults:
+  - _self_
+  - task: metaworld_wrist
+
+name: train_diffusion_unet_timm
+_target_: diffusion_policies.workspace.train_diffusion_unet_image_workspace.TrainDiffusionUnetImageWorkspace
+
+task_name: ${task.name}
+shape_meta: ${task.shape_meta}
+exp_name: default
+
+# n_action_steps: 8
+horizon: 4
+n_obs_steps: 2
+n_action_steps: 4
+n_latency_steps: 0
+dataset_obs_steps: ${n_obs_steps}
+past_action_visible: False
+keypoint_visible_rate: 1.0
+obs_as_global_cond: True
+
+policy:
+  _target_: diffusion_policies.policy.diffusion_unet_timm_policy.DiffusionUnetTimmPolicy
+
+  shape_meta: ${shape_meta}
+
+  noise_scheduler:
+    _target_: diffusers.DDIMScheduler
+    num_train_timesteps: 50
+    beta_start: 0.0001
+    beta_end: 0.02
+    # beta_schedule is important
+    # this is the best we found
+    beta_schedule: squaredcos_cap_v2
+    clip_sample: true
+    set_alpha_to_one: true
+    steps_offset: 0
+    prediction_type: epsilon # or sample
+
+  obs_encoder:
+    _target_: diffusion_policies.model_dp_umi.vision.timm_obs_encoder.TimmObsEncoder
+    shape_meta: ${shape_meta}
+
+    ##### from scratch #####
+    # model_name: 'vit_base_patch16_224'
+    # model_name: 'resnet34'
+    # model_name: 'vit_tiny_patch16_224'
+    # model_name: 'efficientnet_b0'
+    # model_name: 'efficientnet_b3'
+    # pretrained: False
+    # frozen: False
+
+    ##### from scratch #####
+    # model_name: 'resnet34.a1_in1k'
+    model_name: vit_base_patch16_clip_224.openai
+    # model_name: 'convnext_base.clip_laion2b_augreg_ft_in12k'
+    pretrained: true
+    frozen: false
+
+    global_pool: ''
+
+    # 'avg' or 'max' or 'soft_attention' or 'spatial_embedding' or 'transformer' or 'attention_pool_2d'
+    feature_aggregation: attention_pool_2d
+    # feature_aggregation: null
+    position_encording: sinusoidal # 'learnable' or 'sinusoidal'. it only works for transformer
+
+    # it only works for resnet. 32 (7x7) or 16 (14x14)
+    downsample_ratio: 32
+
+    transforms:
+      - type: RandomCrop
+        ratio: 0.95
+
+
+    use_group_norm: true
+    share_rgb_model: false
+    imagenet_norm: true
+
+  num_inference_steps: 16
+  obs_as_global_cond: true
+  diffusion_step_embed_dim: 128
+  down_dims:
+    - 256
+    - 512
+    - 1024
+  kernel_size: 5
+  n_groups: 8
+  cond_predict_scale: true
+  input_pertub: 0.1 # reference: https://github.com/forever208/DDPM-IP
+  # train multiple diffusion steps per obs encoder forward pass
+  # doing this too much will cause instability!
+  train_diffusion_n_samples: 1
+
+ema:
+  _target_: diffusion_policies.model_dp_umi.diffusion.ema_model.EMAModel
+  update_after_step: 0
+  inv_gamma: 1
+  power: 0.75
+  min_value: 0
+  max_value: 0.9999
+
+dataloader:
+  batch_size: 64
+  num_workers: 8
+  shuffle: true
+  pin_memory: true
+  persistent_workers: true
+
+val_dataloader:
+  batch_size: 64
+  num_workers: 8
+  shuffle: false
+  pin_memory: true
+  persistent_workers: true
+
+# dataloader:
+#   batch_size: 64
+#   num_workers: 16
+#   shuffle: True
+#   pin_memory: True
+#   persistent_workers: True
+
+# val_dataloader:
+#   batch_size: 64
+#   num_workers: 16
+#   shuffle: False
+#   pin_memory: True
+#   persistent_workers: True
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 0.0003
+  betas:
+    - 0.95
+    - 0.999
+  eps: 1e-8
+  weight_decay: 0.000001
+
+training:
+  device: "cuda:0"
+  seed: 42
+  debug: False
+  resume: False
+  # optimization
+  lr_scheduler: constant_with_warmup
+  lr_warmup_steps: 500
+  num_epochs: 8000
+  gradient_accumulate_every: 1
+  # EMA destroys performance when used with BatchNorm
+  # replace BatchNorm with GroupNorm.
+  use_ema: True
+  freeze_encoder: false  # always false
+  # training loop control
+  # in epochs
+  rollout_every: 100000   # skip rollout
+  checkpoint_every: null
+  val_every: 1
+  sample_every: 5
+  # steps per epoch
+  max_train_steps: 20000000   # overwrite n_epoch
+  max_val_steps: null
+  # misc
+  tqdm_interval_sec: 1.0
+  save_video: False
+
+logging:
+  project: spatial_generalization
+  group: dp_clip
+  name: ${exp_name}
+  id: ${now:%Y.%m.%d-%H.%M.%S}_${exp_name}
+  mode: online
+  resume: false
+  tags:
+    # - ${exp_name}
+    - ${task_name}
+    - dp_clip
+
+checkpoint:
+  topk:
+    monitor_key: train_loss
+    mode: min
+    k: 20
+    format_str: epoch={epoch:04d}-train_loss={train_loss:.3f}.ckpt
+  save_last_ckpt: true
+  save_last_snapshot: false
+
+multi_run:
+  run_dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+  wandb_name_base: ${now:%Y.%m.%d-%H.%M.%S}_${name}_${task_name}
+
+hydra:
+  job:
+    override_dirname: ${name}
+  run:
+    dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+  sweep:
+    dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+    subdir: ${hydra.job.num}

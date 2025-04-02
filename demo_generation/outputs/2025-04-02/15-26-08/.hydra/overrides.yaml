@@ -1,0 +1,5 @@
+- data_root=../data
+- generation.range_name=src
+- generation.mode=random
+- generation.n_gen_per_source=1
+- generation.render_video=True

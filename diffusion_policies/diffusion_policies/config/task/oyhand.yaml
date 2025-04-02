@@ -1,0 +1,26 @@
+name: real_jar
+
+task_name: ${name}
+
+shape_meta: &shape_meta
+  obs:
+    point_cloud:
+      shape: [1024, 3]
+      type: point_cloud
+    agent_pos:
+      shape: [12]
+      type: low_dim
+  action:
+    shape: [12]
+
+env_runner: null
+
+dataset:
+  _target_: diffusion_policies.dataset.panda_dataset.PandaDataset
+  zarr_path: /home/hz01/Desktop/DoGlove-main/demogen/data/trainset.zarr
+  horizon: ${horizon}
+  pad_before: ${eval:'${n_obs_steps}-1'}
+  pad_after: ${eval:'${n_action_steps}-1'}
+  seed: 42
+  val_ratio: 0.00
+  max_train_episodes: null
