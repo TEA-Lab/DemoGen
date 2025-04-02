@@ -64,7 +64,7 @@ We prepare some `.zarr` datasets consisting of 1~3 source demos under the folder
 **Note:** While the demo generation process is very fast, it takes ~10s to render the video for a single generated trajectory. So we recommend rendering videos only for debugging purpose.
 
 #### 2.3. Demo Generation!
-We provide some example generation commands in the `demo_generation/run_gen_demo.sh` script, including four tasks: **Flower-Vase**, **Mug-Rack**, **Spatula-Egg**, and **Sauce-Spreading**. You can try running it, and compare the results of synthetic and source demos in the `data/datasets/generated` and `data/videos` folders.
+We provide some example generation commands in the `demo_generation/run_gen_demo.sh` script, including four tasks: **Flower-Vase**, **Mug-Rack**, **Spatula-Egg**, and **Sauce-Spreading**. You can try running it and compare the results of synthetic and source demos in the `data/datasets/generated` and `data/videos` folders, where the filename of the videos indicate how the objects are transformed.
 ```bash
 cd demo_generation
 bash run_gen_demo.sh
