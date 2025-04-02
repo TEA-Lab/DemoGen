@@ -7,8 +7,19 @@
 
 
 
-𝑫𝒆𝒎𝒐𝑮𝒆𝒏 is a synthetic data generation approach designed for robotic manipulation. Given only one human demonstration collcted in the real world, 𝑫𝒆𝒎𝒐𝑮𝒆𝒏 could produce hundreds of spatially-augmented synthetic demonstrations in few seconds. These demos are proved to be effective for training [visuomotor policies](https://github.com/YanjieZe/3D-Diffusion-Policy) with strong O.O.D. generalization capabilities.
+# 🎯 Overview
 
+<div align="center">
+  <img src="pics/teaser.png" alt="teaser" width="100%">
+</div>
+
+𝑫𝒆𝒎𝒐𝑮𝒆𝒏 is a synthetic data generation approach designed for robotic manipulation. Given only one human demonstration collcted in the real world, 𝑫𝒆𝒎𝒐𝑮𝒆𝒏 could produce hundreds of spatially-augmented synthetic demonstrations in few seconds. These demos are proved to be effective for training visuomotor policies (e.g., [DP3](https://github.com/YanjieZe/3D-Diffusion-Policy)) with strong O.O.D. generalization capabilities.
+
+<br>
+<div align="center">
+  <img src="pics/method.png" alt="method" width="100%">
+</div>
+For action generation, 𝑫𝒆𝒎𝒐𝑮𝒆𝒏 adopts the idea of Task and Motion Planning (TAMP) and adapts the source actions according to novel object configurations. For visual observation generation, 𝑫𝒆𝒎𝒐𝑮𝒆𝒏 leverages 3D point clouds as the modality and rearranges the subjects in the scene via 3D editing.
 
 # 🐣 Update
 * **2025/04/02**, Officially released 𝑫𝒆𝒎𝒐𝑮𝒆𝒏.
