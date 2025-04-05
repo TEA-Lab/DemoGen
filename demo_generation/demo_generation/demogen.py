@@ -580,7 +580,7 @@ class DemoGen:
         state_chunk_size = (100, state_arrays.shape[1])
         point_cloud_chunk_size = (100, point_cloud_arrays.shape[1], point_cloud_arrays.shape[2])
         action_chunk_size = (100, action_arrays.shape[1])
-        zarr_data.create_dataset('state', data=state_arrays, chunks=state_chunk_size, dtype='float32', overwrite=True, compressor=compressor)
+        zarr_data.create_dataset('agent_pos', data=state_arrays, chunks=state_chunk_size, dtype='float32', overwrite=True, compressor=compressor)
         zarr_data.create_dataset('point_cloud', data=point_cloud_arrays, chunks=point_cloud_chunk_size, dtype='float32', overwrite=True, compressor=compressor)
         zarr_data.create_dataset('action', data=action_arrays, chunks=action_chunk_size, dtype='float32', overwrite=True, compressor=compressor)
         zarr_meta.create_dataset('episode_ends', data=episode_ends_arrays, dtype='int64', overwrite=True, compressor=compressor)
@@ -596,7 +596,7 @@ class DemoGen:
         import h5py
         save_dir = save_dir.replace('.zarr', '.hdf5')
         with h5py.File(save_dir, 'w') as f:
-            f.create_dataset('state', data=state_arrays, compression='gzip')
+            f.create_dataset('agent_pos', data=state_arrays, compression='gzip')
             f.create_dataset('point_cloud', data=point_cloud_arrays, compression='gzip')
             f.create_dataset('action', data=action_arrays, compression='gzip')
             f.create_dataset('episode_ends', data=episode_ends_arrays, compression='gzip')
