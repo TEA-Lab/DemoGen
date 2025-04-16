@@ -4,7 +4,7 @@
 
 <a href="https://demo-generation.github.io/"><strong>Project Page</strong></a> | <a href="https://arxiv.org/abs/2502.16932"><strong>arXiv</strong></a> | <a href="https://x.com/ZhengrongX/status/1899134914416800123"><strong>Twitter</strong></a> 
 
-
+**Robotics: Science and Systems (RSS) 2025**
 
 
 # 🎯 Overview
